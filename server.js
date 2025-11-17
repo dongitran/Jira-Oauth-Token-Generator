@@ -176,7 +176,9 @@ app.get('/auth/callback', async (req, res) => {
           "--client_id",
           process.env.JIRA_ATLASSIAN_CLIENT_ID,
           "--client_secret",
-          process.env.JIRA_ATLASSIAN_CLIENT_SECRET
+          process.env.JIRA_ATLASSIAN_CLIENT_SECRET,
+          "--cloud_id",
+          workspaceToUse.id
         ],
         "env": {}
       }
