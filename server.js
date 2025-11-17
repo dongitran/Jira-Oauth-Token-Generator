@@ -164,11 +164,22 @@ app.get('/auth/callback', async (req, res) => {
       }
     }
 
-    const authResult = {
-      access_token,
-      refresh_token,
-      client_id: process.env.JIRA_ATLASSIAN_CLIENT_ID,
-      client_secret: process.env.JIRA_ATLASSIAN_CLIENT_SECRET
+    // MCP Server config format
+    const mcpConfig = {
+      "jira": {
+        "command": "jira-mcp-server",
+        "args": [
+          "--access_token",
+          access_token,
+          "--refresh_token",
+          refresh_token,
+          "--client_id",
+          process.env.JIRA_ATLASSIAN_CLIENT_ID,
+          "--client_secret",
+          process.env.JIRA_ATLASSIAN_CLIENT_SECRET
+        ],
+        "env": {}
+      }
     };
 
     console.log(`Auth completed for user: ${userResponse.data.email} (workspace: ${workspaceToUse.name})`);
@@ -180,7 +191,7 @@ app.get('/auth/callback', async (req, res) => {
                     <style>
                         body { 
                             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-                            max-width: 800px; 
+                            max-width: 900px; 
                             margin: 50px auto; 
                             padding: 20px; 
                             background: #f9fafb;
@@ -201,10 +212,11 @@ app.get('/auth/callback', async (req, res) => {
                             border-radius: 8px;
                             margin: 15px 0;
                             font-family: 'Courier New', monospace;
-                            font-size: 12px;
+                            font-size: 11px;
                             word-break: break-all;
-                            max-height: 300px;
+                            max-height: 400px;
                             overflow-y: auto;
+                            white-space: pre-wrap;
                         }
                         .copy-btn {
                             background: #667eea;
@@ -233,6 +245,7 @@ app.get('/auth/callback', async (req, res) => {
                             position: absolute;
                             top: 10px;
                             right: 10px;
+                            z-index: 10;
                         }
                         .warning-box {
                             background: #fef3c7;
@@ -242,6 +255,31 @@ app.get('/auth/callback', async (req, res) => {
                             margin: 20px 0;
                             font-size: 13px;
                             color: #92400e;
+                        }
+                        .info-box {
+                            background: #dbeafe;
+                            border-left: 4px solid #3b82f6;
+                            padding: 15px;
+                            border-radius: 4px;
+                            margin: 20px 0;
+                            font-size: 13px;
+                            color: #1e40af;
+                        }
+                        .steps {
+                            background: #f3f4f6;
+                            padding: 15px;
+                            border-radius: 8px;
+                            margin: 15px 0;
+                        }
+                        .steps ol {
+                            margin: 10px 0 0 20px;
+                            line-height: 1.8;
+                        }
+                        .steps code {
+                            background: #e5e7eb;
+                            padding: 2px 6px;
+                            border-radius: 3px;
+                            font-size: 12px;
                         }
                     </style>
                 </head>
@@ -258,15 +296,30 @@ app.get('/auth/callback', async (req, res) => {
                     </div>
 
                     <div class="section">
-                        <h3>Your Jira OAuth Credentials for MCP Server</h3>
+                        <h3>📋 MCP Server Configuration (Claude Desktop / Cursor)</h3>
+                        <div class="info-box">
+                            <strong>💡 Ready to use!</strong> Copy the JSON below and paste it into your MCP configuration file.
+                        </div>
                         <div class="json-container">
-                            <button class="copy-btn copy-all-btn" onclick="copyToClipboard('jsonResponse', this)">📋 Copy JSON</button>
-                            <div class="token-box" id="jsonResponse">${JSON.stringify(authResult, null, 2)}</div>
+                            <button class="copy-btn copy-all-btn" onclick="copyToClipboard('mcpConfig', this)">📋 Copy Config</button>
+                            <div class="token-box" id="mcpConfig">${JSON.stringify(mcpConfig, null, 2)}</div>
+                        </div>
+                        
+                        <div class="steps">
+                            <strong>🚀 How to use:</strong>
+                            <ol>
+                                <li>Copy the JSON configuration above</li>
+                                <li><strong>Claude Desktop:</strong> Open <code>~/Library/Application Support/Claude/claude_desktop_config.json</code></li>
+                                <li><strong>Cursor:</strong> Open <code>.cursor/mcp.json</code> in your project</li>
+                                <li>Paste the config into <code>"mcpServers"</code> section</li>
+                                <li>Restart Claude Desktop or Cursor</li>
+                                <li>✅ Done! Tokens will be cached automatically</li>
+                            </ol>
                         </div>
                     </div>
 
                     <p style="text-align: center; color: #6b7280; margin-top: 30px;">
-                        <em>Copy the JSON above and paste it into your MCP server configuration. You can now close this window.</em>
+                        <em>You can now close this window.</em>
                     </p>
 
                     <script>

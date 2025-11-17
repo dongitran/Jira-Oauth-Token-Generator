@@ -48,18 +48,53 @@ pm2 start ecosystem.config.js
 1. Open http://localhost:3001
 2. Click "Connect to Jira"
 3. Authorize with your Atlassian account
-4. Copy the JSON credentials
+4. Copy the MCP configuration JSON
 
-### Output Format
+### Output Format (MCP Server Config)
 
 ```json
 {
-  "access_token": "eyJhbGc...",
-  "refresh_token": "eyJhbGc...",
-  "client_id": "your_client_id",
-  "client_secret": "your_client_secret"
+  "jira": {
+    "command": "jira-mcp-server",
+    "args": [
+      "--access_token",
+      "eyJhbGc...",
+      "--refresh_token",
+      "eyJhbGc...",
+      "--client_id",
+      "your_client_id",
+      "--client_secret",
+      "your_client_secret"
+    ],
+    "env": {}
+  }
 }
 ```
+
+### How to Use the Config
+
+**For Claude Desktop:**
+1. Open `~/Library/Application Support/Claude/claude_desktop_config.json`
+2. Add the config to `"mcpServers"` section:
+```json
+{
+  "mcpServers": {
+    "jira": {
+      "command": "jira-mcp-server",
+      "args": ["--access_token", "...", "--refresh_token", "...", "--client_id", "...", "--client_secret", "..."],
+      "env": {}
+    }
+  }
+}
+```
+3. Restart Claude Desktop
+
+**For Cursor:**
+1. Create `.cursor/mcp.json` in your project
+2. Paste the config
+3. Restart Cursor
+
+**Note:** After first run, tokens are cached to `~/.jira-mcp/tokens.cache` and will auto-refresh. You only need to provide tokens once!
 
 ### OAuth Scopes
 
