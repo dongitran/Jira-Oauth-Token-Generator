@@ -129,8 +129,14 @@ open ~/Library/Application\ Support/Claude/claude_desktop_config.json
 **Cursor:**
 - Create `.cursor/mcp.json` → paste config → restart
 
-**VS Code (Kiro):**
-- Create `.kiro/settings/mcp.json` → paste config → restart
+**VS Code:**
+```bash
+# open config file
+open ~/Library/Application\ Support/Code/User/mcp.json
+
+# paste into "mcpServers" section
+# restart VS Code
+```
 
 ✅ **Done!** Tokens will auto-cache and refresh.
 
