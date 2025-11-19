@@ -1,121 +1,188 @@
 # 🔐 Jira OAuth Token Generator
 
-Simple web-based OAuth 2.0 token generator for Jira/Atlassian. Get your access token, refresh token in one click.
+**Purpose:** Generate OAuth credentials for [Jira MCP Server](https://github.com/dongitran/Jira-MCP-Server) the easy way - just click and copy/paste!
 
-## ✨ Features
+## 🎯 What does this tool do?
 
-- 🚀 Simple one-click OAuth flow
-- 🔒 Workspace validation (optional)
-- 📋 Copy credentials as JSON
-- 🎯 No database required
-- ⚡ Lightweight and fast
+Instead of manually implementing the complex OAuth 2.0 flow, you simply:
+1. Run this server
+2. Click "Connect to Jira"
+3. Get ready-to-use credentials for Jira MCP Server
 
-## 🚀 Quick Start
+**Relationship between the two projects:**
 
-### Installation
+```mermaid
+graph LR
+    A[OAuth Token Generator<br/>this tool] -->|generates| B[Credentials<br/>tokens + cloud_id]
+    B -->|used by| C[Jira MCP Server<br/>used in Claude/Cursor]
+
+    style A fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+    style B fill:#48bb78,stroke:#333,stroke-width:2px,color:#fff
+    style C fill:#ed8936,stroke:#333,stroke-width:2px,color:#fff
+```
+
+## ⚡ Quick Start
+
+### 1️⃣ Installation
 
 ```bash
+git clone https://github.com/dongitran/Jira-Oauth-Token-Generator.git
+cd Jira-Oauth-Token-Generator
 npm install
 ```
 
-### Configuration
+### 2️⃣ Create Atlassian OAuth App
 
-Create a `.env` file:
+1. Go to [Atlassian Developer Console](https://developer.atlassian.com/console/myapps/)
+2. Create OAuth 2.0 integration
+3. Callback URL: `http://localhost:3001/auth/callback`
+4. Add permissions: `read:jira-user`, `read:jira-work`, `manage:jira-project`, `write:jira-work`, `offline_access`, `read:me`
+5. Copy **Client ID** and **Client Secret**
+
+### 3️⃣ Configuration
+
+Create `.env` file:
 
 ```env
 JIRA_ATLASSIAN_CLIENT_ID=your_client_id
 JIRA_ATLASSIAN_CLIENT_SECRET=your_client_secret
 JIRA_REDIRECT_URI=http://localhost:3001/auth/callback
 PORT=3001
-ALLOWED_WORKSPACE=your-workspace-name  # Optional: restrict to specific workspace
 ```
 
-### Run
+### 4️⃣ Run
 
 ```bash
-# Development
-npm run dev
-
-# Production
 npm start
-
-# With PM2
-pm2 start ecosystem.config.js
+# or: npm run dev (auto-reload)
+# or: pm2 start ecosystem.config.js
 ```
 
-## 📖 Usage
+## 🏢 Use Case: Enterprise Setup
 
-1. Open http://localhost:3001
-2. Click "Connect to Jira"
-3. Authorize with your Atlassian account
-4. Copy the MCP configuration JSON
+### Why should companies use this?
 
-### Output Format (MCP Server Config)
+**Problem:** Companies want their dev/PM teams to use AI (Claude, Cursor) to interact with Jira, but setting up OAuth for each person is complex and time-consuming.
+
+**Solution:** Deploy a centralized OAuth Token Generator:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      Company Workflow                       │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  1. IT Admin setup OAuth Generator (one-time only)          │
+│     ├─ Create Atlassian OAuth App for company               │
+│     ├─ Deploy internal server (or localhost)                │
+│     └─ Set ALLOWED_WORKSPACE = "company-jira"               │
+│                                                             │
+│  2. Employees self-serve credentials (few clicks)           │
+│     ├─ Open internal URL or localhost                       │
+│     ├─ Click "Connect to Jira"                              │
+│     ├─ Copy config JSON                                     │
+│     └─ Paste into Claude/Cursor                             │
+│                                                             │
+│  3. Result                                                  │
+│     ├─ ✅ Entire team can use AI + Jira integration         │
+│     ├─ ✅ Workspace validation ensures only company staff   │
+│     ├─ ✅ Tokens auto-refresh, no re-setup needed           │
+│     └─ ✅ IT setup once, devs self-serve                    │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## 🔄 OAuth Flow
+
+```mermaid
+sequenceDiagram
+    participant E as Employee
+    participant T as Token Generator
+    participant A as Atlassian
+    participant M as MCP Server (Claude/Cursor)
+
+    Note over E,M: 🏢 Enterprise OAuth Flow
+
+    E->>T: 1. Click "Connect to Jira"
+    T->>A: 2. Redirect to Atlassian login
+    E->>A: 3. Login & grant access
+    A->>T: 4. Return tokens + cloud_id
+
+    alt Workspace Validation ON
+        T->>T: 5a. Check if employee in ALLOWED_WORKSPACE
+        T-->>E: 5b. ✅ Access granted (or ❌ denied)
+    end
+
+    T->>E: 6. Show MCP config JSON
+    E->>E: 7. Copy & paste to Claude/Cursor
+    E->>M: 8. Restart MCP client
+
+    Note over M: ✅ Ready! AI can now interact with Jira
+    Note over M: Tokens auto-refresh, no re-auth needed
+```
+
+## 📖 How to Use
+
+### Step 1: Authenticate
+1. Open [http://localhost:3001](http://localhost:3001)
+2. Click **"Connect to Jira"**
+3. Login to Atlassian and grant access
+
+### Step 2: Copy config
+The server will display JSON config like this:
 
 ```json
 {
   "jira": {
     "command": "jira-mcp-server",
     "args": [
-      "--access_token",
-      "eyJhbGc...",
-      "--refresh_token",
-      "eyJhbGc...",
-      "--client_id",
-      "your_client_id",
-      "--client_secret",
-      "your_client_secret"
+      "--access_token", "eyJhbGc...",
+      "--refresh_token", "eyJhbGc...",
+      "--client_id", "...",
+      "--client_secret", "...",
+      "--cloud_id", "..."
     ],
     "env": {}
   }
 }
 ```
 
-### How to Use the Config
+Click **"Copy Config"** to copy.
 
-**For Claude Desktop:**
-1. Open `~/Library/Application Support/Claude/claude_desktop_config.json`
-2. Add the config to `"mcpServers"` section:
-```json
-{
-  "mcpServers": {
-    "jira": {
-      "command": "jira-mcp-server",
-      "args": ["--access_token", "...", "--refresh_token", "...", "--client_id", "...", "--client_secret", "..."],
-      "env": {}
-    }
-  }
-}
+### Step 3: Use in MCP Client
+
+**Claude Desktop:**
+```bash
+# open config file
+open ~/Library/Application\ Support/Claude/claude_desktop_config.json
+
+# paste into "mcpServers" section
+# restart Claude Desktop
 ```
-3. Restart Claude Desktop
 
-**For Cursor:**
-1. Create `.cursor/mcp.json` in your project
-2. Paste the config
-3. Restart Cursor
+**Cursor:**
+- Create `.cursor/mcp.json` → paste config → restart
 
-**Note:** After first run, tokens are cached to `~/.jira-mcp/tokens.cache` and will auto-refresh. You only need to provide tokens once!
+**VS Code (Kiro):**
+- Create `.kiro/settings/mcp.json` → paste config → restart
 
-### OAuth Scopes
+✅ **Done!** Tokens will auto-cache and refresh.
 
-Default scopes:
-- `read:jira-user` - Read user information
-- `read:jira-work` - Read Jira issues and projects
-- `manage:jira-project` - Manage projects
-- `write:jira-work` - Create and update issues
-- `offline_access` - Get refresh token
-- `read:me` - Read account information
+## 🔒 Security Features
 
-## 🛠️ API Endpoints
+- **CSRF Protection**: UUID state tokens prevent attacks
+- **Workspace Validation**: Only company employees can authenticate
+- **Token Caching**: Tokens stored locally (~/.jira-mcp/), not sent over network
+- **Session Expiry**: Auth sessions auto-delete after 10 minutes
+- **No Database**: Stateless design, no sensitive data storage
 
-- `GET /` - Home page with OAuth button
-- `GET /auth/start` - Start OAuth flow
-- `GET /auth/callback` - OAuth callback (internal)
-- `GET /health` - Health check
+## 📚 Related Links
+
+- [Jira MCP Server](https://github.com/dongitran/Jira-MCP-Server) - MCP server that uses these credentials
+- [Model Context Protocol](https://modelcontextprotocol.io) - Learn about MCP
 
 ## 👨‍💻 Author
 
-dongtran ✨
+**dongtran** ✨
 
 ## 📄 License
 
