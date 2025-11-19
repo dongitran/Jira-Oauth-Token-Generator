@@ -85,32 +85,7 @@ npm start
 
 ## 🔄 OAuth Flow
 
-```mermaid
-sequenceDiagram
-    participant E as Employee
-    participant T as Token Generator
-    participant A as Atlassian
-    participant M as MCP Server (Claude/Cursor)
-
-    Note over E,M: 🏢 Enterprise OAuth Flow
-
-    E->>T: 1. Click "Connect to Jira"
-    T->>A: 2. Redirect to Atlassian login
-    E->>A: 3. Login & grant access
-    A->>T: 4. Return tokens + cloud_id
-
-    alt Workspace Validation ON
-        T->>T: 5a. Check if employee in ALLOWED_WORKSPACE
-        T-->>E: 5b. ✅ Access granted (or ❌ denied)
-    end
-
-    T->>E: 6. Show MCP config JSON
-    E->>E: 7. Copy & paste to Claude/Cursor
-    E->>M: 8. Restart MCP client
-
-    Note over M: ✅ Ready! AI can now interact with Jira
-    Note over M: Tokens auto-refresh, no re-auth needed
-```
+![OAuth Flow](images/oauth-flow.png)
 
 ## 📖 How to Use
 
