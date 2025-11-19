@@ -136,7 +136,7 @@ Then use this config format instead:
   "jira": {
     "command": "node",
     "args": [
-      "/Users/YOUR_USERNAME/.nvm/versions/node/v20.18.0/lib/node_modules/@urcard/jira-mcp-server/server.js",
+      "/Users/YOUR_USERNAME/.nvm/versions/node/v20.x.x/lib/node_modules/@urcard/jira-mcp-server/server.js",
       "--access_token", "eyJhbGc...",
       "--refresh_token", "eyJhbGc...",
       "--client_id", "...",
@@ -148,7 +148,7 @@ Then use this config format instead:
 }
 ```
 
-**Note:** Replace `YOUR_USERNAME` and the Node version path with your actual values. Find your path with:
+**Note:** Replace `YOUR_USERNAME` and `v20.x.x` with your actual Node version (>= 20). Find your path with:
 ```bash
 which jira-mcp-server
 # or
