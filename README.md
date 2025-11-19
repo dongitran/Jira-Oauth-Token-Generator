@@ -13,43 +13,6 @@ Instead of manually implementing the complex OAuth 2.0 flow, you simply:
 
 ![Architecture Diagram](images/architecture-diagram.png)
 
-## ⚡ Quick Start
-
-### 1️⃣ Installation
-
-```bash
-git clone https://github.com/dongitran/Jira-Oauth-Token-Generator.git
-cd Jira-Oauth-Token-Generator
-npm install
-```
-
-### 2️⃣ Create Atlassian OAuth App
-
-1. Go to [Atlassian Developer Console](https://developer.atlassian.com/console/myapps/)
-2. Create OAuth 2.0 integration
-3. Callback URL: `http://localhost:3001/auth/callback`
-4. Add permissions: `read:jira-user`, `read:jira-work`, `manage:jira-project`, `write:jira-work`, `offline_access`, `read:me`
-5. Copy **Client ID** and **Client Secret**
-
-### 3️⃣ Configuration
-
-Create `.env` file:
-
-```env
-JIRA_ATLASSIAN_CLIENT_ID=your_client_id
-JIRA_ATLASSIAN_CLIENT_SECRET=your_client_secret
-JIRA_REDIRECT_URI=http://localhost:3001/auth/callback
-PORT=3001
-```
-
-### 4️⃣ Run
-
-```bash
-npm start
-# or: npm run dev (auto-reload)
-# or: pm2 start ecosystem.config.js
-```
-
 ## 🏢 Use Case: Enterprise Setup
 
 ### Why should companies use this?
@@ -86,6 +49,43 @@ npm start
 ## 🔄 OAuth Flow
 
 ![OAuth Flow](images/oauth-flow.png)
+
+## ⚡ Quick Start
+
+### 1️⃣ Installation
+
+```bash
+git clone https://github.com/dongitran/Jira-Oauth-Token-Generator.git
+cd Jira-Oauth-Token-Generator
+npm install
+```
+
+### 2️⃣ Create Atlassian OAuth App
+
+1. Go to [Atlassian Developer Console](https://developer.atlassian.com/console/myapps/)
+2. Create OAuth 2.0 integration
+3. Callback URL: `http://localhost:3001/auth/callback`
+4. Add permissions: `read:jira-user`, `read:jira-work`, `manage:jira-project`, `write:jira-work`, `offline_access`, `read:me`
+5. Copy **Client ID** and **Client Secret**
+
+### 3️⃣ Configuration
+
+Create `.env` file:
+
+```env
+JIRA_ATLASSIAN_CLIENT_ID=your_client_id
+JIRA_ATLASSIAN_CLIENT_SECRET=your_client_secret
+JIRA_REDIRECT_URI=http://localhost:3001/auth/callback
+PORT=3001
+```
+
+### 4️⃣ Run
+
+```bash
+npm start
+# or: npm run dev (auto-reload)
+# or: pm2 start ecosystem.config.js
+```
 
 ## 📖 How to Use
 
