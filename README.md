@@ -11,15 +11,7 @@ Instead of manually implementing the complex OAuth 2.0 flow, you simply:
 
 **Relationship between the two projects:**
 
-```mermaid
-graph LR
-    A[OAuth Token Generator<br/>this tool] -->|generates| B[Credentials<br/>tokens + cloud_id]
-    B -->|used by| C[Jira MCP Server<br/>used in Claude/Cursor]
-
-    style A fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
-    style B fill:#48bb78,stroke:#333,stroke-width:2px,color:#fff
-    style C fill:#ed8936,stroke:#333,stroke-width:2px,color:#fff
-```
+![Architecture Diagram](images/architecture-diagram.png)
 
 ## ⚡ Quick Start
 
