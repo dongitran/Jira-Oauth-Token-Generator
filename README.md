@@ -117,6 +117,46 @@ Click **"Copy Config"** to copy.
 
 ### Step 3: Use in MCP Client
 
+#### Option A: Direct Command (Recommended)
+
+Use the config from Step 2 as-is.
+
+#### Option B: Global Installation (If Option A doesn't work)
+
+Sometimes the `jira-mcp-server` command may not be found. In this case, install the package globally:
+
+```bash
+npm install -g @urcard/jira-mcp-server
+```
+
+Then use this config format instead:
+
+```json
+{
+  "jira": {
+    "command": "node",
+    "args": [
+      "/Users/YOUR_USERNAME/.nvm/versions/node/v20.18.0/lib/node_modules/@urcard/jira-mcp-server/server.js",
+      "--access_token", "eyJhbGc...",
+      "--refresh_token", "eyJhbGc...",
+      "--client_id", "...",
+      "--client_secret", "...",
+      "--cloud_id", "..."
+    ],
+    "env": {}
+  }
+}
+```
+
+**Note:** Replace `YOUR_USERNAME` and the Node version path with your actual values. Find your path with:
+```bash
+which jira-mcp-server
+# or
+npm root -g
+```
+
+#### Configuration by Client
+
 **Claude Desktop:**
 ```bash
 # open config file
