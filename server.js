@@ -318,6 +318,14 @@ app.get('/auth/callback', async (req, res) => {
                                 <li>✅ Done! Tokens will be cached automatically</li>
                             </ol>
                         </div>
+
+                        <div class="info-box" style="margin-top: 15px;">
+                            <strong>💡 Optional: Auto-assign Sprint</strong><br>
+                            Add these args to auto-assign new tasks to active sprint:<br>
+                            <code>"--default_project", "YOUR_PROJECT_KEY"</code><br>
+                            <code>"--default_board_id", "YOUR_BOARD_ID"</code><br>
+                            <small style="color: #6b7280;">Board ID is in URL: <code>/boards/9</code> → board_id = 9</small>
+                        </div>
                     </div>
 
                     <p style="text-align: center; color: #6b7280; margin-top: 30px;">
