@@ -26,7 +26,7 @@ app.get('/auth/start', (req, res) => {
   const params = new URLSearchParams({
     audience: 'api.atlassian.com',
     client_id: process.env.JIRA_ATLASSIAN_CLIENT_ID,
-    scope: 'read:jira-user read:jira-work manage:jira-project write:jira-work offline_access read:me',
+    scope: 'read:jira-user read:jira-work manage:jira-project write:jira-work offline_access read:me read:board-scope:jira-software read:sprint:jira-software write:sprint:jira-software',
     redirect_uri: process.env.JIRA_REDIRECT_URI,
     state: state,
     response_type: 'code',
